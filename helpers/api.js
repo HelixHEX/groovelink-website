@@ -1,7 +1,6 @@
 import axios from "axios"
 const url = process.env.NEXT_PUBLIC_API_URL
 export const allMessages = () => {
-    // await axios.post(`${process.env.API_URL}/user/`)
     let messages = [
         {
             text: 'Sample message',

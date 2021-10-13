@@ -20,7 +20,6 @@ const Login = () => {
         <Flex w='100%' h='100vh' justifyContent='center' alignContent='center'>
             <Button _hover={{bg: 'white.200', color: 'white.800'}} bg='green.400' color='white' rounded={70} w={300} h={70} alignSelf='center' onClick={() => handleLogin()}>Login with Spotify</Button>
         </Flex>
-        // <button onClick={() => handleLogin()}>login</button>
     )
 }
 export default Login

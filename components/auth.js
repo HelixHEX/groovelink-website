@@ -10,7 +10,6 @@ export default function Auth({ Component, pageProps }) {
     if (loading) return null;
 
     if (!session) return <Login />
-    // if (!session) return <Login />
 
     return <Component {...pageProps} session={session} />
 }

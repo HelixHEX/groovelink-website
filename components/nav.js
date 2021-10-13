@@ -19,6 +19,7 @@ const Nav = () => {
     const [friends, setFriends] = useState([])
     useEffect(() => {
         console.log(session.user)
+        console.log(session.user.accessToken)
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
                 spotifyId: session.user.id
@@ -28,24 +29,27 @@ const Nav = () => {
         }
         main()
     }, [])
-    
+
+    const handleNav = path => {
+        router.push(path)
+    }
     return (
         <>
-            <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={30} borderTopLeftRadius={30} bg='#F5F9FA' w={250} h={'100%'}>
+            <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={20} borderTopLeftRadius={20} bg='#F5F9FA' w={250} h={'100%'}>
                 <Flex alignSelf='center' flexDir='column'>
-                    <Flex _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/' ? '#032F95' : '#66676E'} h={6}>
+                    <Flex onClick={() => handleNav('/')} _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/' ? '#032F95' : '#66676E'} h={6}>
                         <Icon h={25} w={25} alignSelf='center' as={UserPlus} />
                         <Text fontSize={20} ml={5}>Discover</Text>
                     </Flex>
-                    <Flex _hover={{ cursor: 'pointer', color: '#032F95' }} mt={10} color='#66676E' h={6}>
+                    <Flex onClick={() => handleNav('friends')} _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/friends' ? '#032F95' : '#66676E'} mt={10} h={6}>
                         <Icon h={25} w={25} alignSelf='center' as={Users} />
                         <Text ml={5} fontSize={20} >Friends</Text>
                     </Flex>
-                    <Flex _hover={{ cursor: 'pointer', color: '#032F95' }} mt={10} color='#66676E' h={6}>
+                    <Flex onClick={() => handleNav('playlists')} _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/playlists' ? '#032F95' : '#66676E'} mt={10} h={6}>
                         <Icon h={25} w={25} alignSelf='center' as={Disc} />
                         <Text ml={5} fontSize={20} >Playlists</Text>
                     </Flex>
-                    <Flex _hover={{ cursor: 'pointer', color: '#032F95' }} mt={10} color='#66676E' h={6}>
+                    <Flex onClick={() => handleNav('profile')} _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/profile' ? '#032F95' : '#66676E'} mt={10} h={6}>
                         <Icon h={25} w={25} alignSelf='center' as={User} />
                         <Text ml={5} fontSize={20} >Profile</Text>
                     </Flex>
@@ -53,7 +57,7 @@ const Nav = () => {
                     {friends ?
                         friends.map((data, index) => (
                             <Flex mt={5} key={index}>
-                                {data.picture ? <Image w={45} h={45} rounded={100} src={data.picture} alt={data.name} /> : <Avatar name={data.name} />}
+                                <Avatar rounded={100} src={data.picture} w={45} h={45} name={data.name} />
                                 <Text alignSelf='center' ml={3} w={150} isTruncated>{data.name}</Text>
                             </Flex>
                         )) : <Text>Loading...</Text>}
