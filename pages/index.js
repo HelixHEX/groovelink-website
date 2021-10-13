@@ -8,6 +8,7 @@ import {
 
 import Nav from '../components/nav'
 import RightNav from "../components/rigthnav"
+import UserCards from '../components/usercards'
 
 export default function Home() {
   const [session] = useSession()
@@ -17,8 +18,13 @@ export default function Home() {
       {/* <Button onClick={signOut}>Sign out</Button> */}
       <Flex w='100%' h='100vh' p={3}>
         <Nav session={session} />
-        <Flex w='70%' h='100%'>
-
+        <Flex flexDir='column' w='70%' h='100%' >
+          <Text alignSelf='center' fontSize={50} color='#032F95'>Discover</Text>
+          <Flex mt={10} alignSelf='center'>
+            <Button right={10} margin='auto' color='#00F3F8' bg='#032F95'>Skip</Button>
+            <UserCards />
+            <Button left={10} margin='auto' color='#00F3F8' bg='#032F95'>Add</Button>
+          </Flex>
         </Flex>
         <RightNav />
       </Flex>

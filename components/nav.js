@@ -13,22 +13,22 @@ import { signOut, useSession } from 'next-auth/client'
 
 import Avatar from '../components/avatar'
 import { useRouter } from 'next/router'
-import { getFriends } from '../helpers/api'
 const Nav = () => {
     const router = useRouter()
     const [session] = useSession()
-    const [friends, setFriends] = useState(getFriends)
-    // useEffect(() => {
-    //     console.log(session.user)
-    //     const main = async () => {
-    //         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
-    //             spotifyId: session.user.id
-    //         }).then(res => {
-    //             if (res.data.success) setFriends(res.data.friends)
-    //         })
-    //     }
-    //     main()
-    // }, [])
+    const [friends, setFriends] = useState([])
+    useEffect(() => {
+        console.log(session.user)
+        const main = async () => {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
+                spotifyId: session.user.id
+            }).then(res => {
+                if (res.data.success) setFriends(res.data.friends)
+            })
+        }
+        main()
+    }, [])
+    
     return (
         <>
             <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={30} borderTopLeftRadius={30} bg='#F5F9FA' w={250} h={'100%'}>
@@ -58,7 +58,6 @@ const Nav = () => {
                             </Flex>
                         )) : <Text>Loading...</Text>}
                     <Button mt={30} onClick={signOut}>Sign out</Button>
-                    {/* <Text mt={5}>{session.user.id}</Text> */}
                 </Flex>
             </Flex>
         </>

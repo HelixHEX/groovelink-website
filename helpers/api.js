@@ -37,9 +37,9 @@ export const allMessages = () => {
     return messages
 }
 
-export const getFriends = async ({session}) => {
+export const getFriends = async (session) => {
     await axios.post(`${url}/user/friends`, {
-        spotifyId: session.id
+        spotifyId: session.user.id
     }).then(res => {
         if (res.success)
             return res.data.friends

@@ -38,7 +38,7 @@ const RightNav = () => {
                         <Image h={100} w={100} rounded={100} borderColor='black' borderWidth={100} mt={-50} src='https://i.ibb.co/pf24Ttq/IMG-6145-Original.jpg' />
                         <Flex mt={2} color='#66676E' flexDir='column'>
                             <Text ml={3} >{session.user.name}, 18</Text>
-                            <Text ml={3} >San Rafael, CA</Text>
+                            <Text fontWeight='200' ml={3} >San Rafael, CA</Text>
                         </Flex>
                     </Flex>
                     <Flex mt={5} flexDir='column'>
