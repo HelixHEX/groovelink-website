@@ -15,7 +15,8 @@ const options = {
                     email: profile.email,
                     image: profile.images?.[0]?.url
                 }
-            }
+            },
+            // accessTokenUrl: "https://accounts.spotify.com/api/token",
         }),
     ],
     callbacks: {
