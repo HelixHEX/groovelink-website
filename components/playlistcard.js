@@ -17,26 +17,26 @@ import { useSession } from 'next-auth/client'
 import { useEffect, useState } from 'react'
 import Song from './song'
 
-const PlaylistCard = ({ playlist }) => {
+const PlaylistCard = ({ playlist, hSongs }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
             <Flex onClick={onOpen} p={3} textAlign='center' _hover={{ bg: '#032F95', color: 'white', cursor: 'pointer', rounded: '10' }} flexDir='column'>
                 {playlist.images.length > 0
-                    ? <Image margin='auto' rounded={10} w={150} h={150} src={playlist.images[0].url} /> :
-                    <Flex margin='auto' rounded={10} w={150} h={150} bg='blue.400'>
+                    ? <Image margin='auto' rounded={10} w={150} h={150} src={playlist.images[0].url} /> 
+                    : <Flex margin='auto' rounded={10} w={150} h={150} bg='blue.400'>
                         <Text margin='auto' fontSize={50} color='white'>{playlist.name.charAt(0)}</Text>
                     </Flex>
                 }
                 <Text w={200} >{playlist.name}</Text>
             </Flex>
-            <PlaylistModal playlist={playlist} onOpen={onOpen} isOpen={isOpen} onClose={onClose} />
+            <PlaylistModal hSongs={hSongs} playlist={playlist} onOpen={onOpen} isOpen={isOpen} onClose={onClose} />
         </>
     )
 }
 
-const PlaylistModal = ({ playlist, isOpen, onClose, onOpen }) => {
+const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
     const [session] = useSession()
     const [playlistData, setPlaylistData] = useState({})
     useEffect(() => {
@@ -65,7 +65,7 @@ const PlaylistModal = ({ playlist, isOpen, onClose, onOpen }) => {
                         <Flex overflowY='auto' flexDir='column'>
                             {playlistData.tracks.items.map((track, index) => (
                                 <div key={index}>
-                                    <Song song={track} index={index} />
+                                    <Song hSongs={hSongs} song={track} index={index} />
                                 </div>
                             ))}
                         </Flex>

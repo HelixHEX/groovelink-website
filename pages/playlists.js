@@ -5,21 +5,33 @@ import {
     GridItem
 } from '@chakra-ui/react'
 import axios from 'axios'
-import { signOut } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 import { useEffect, useState } from 'react'
 import Nav from '../components/nav'
 import PlaylistCard from '../components/playlistcard'
 
-const Playlists = ({ session }) => {
+const Playlists = () => {
     const [playlists, setPlaylists] = useState([])
+    const [highlightedSongs, setHighlightedSongs] = useState([])
+    const [session] = useSession()
     useEffect(() => {
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/music/playlists`, {
-                accessToken: session.user.accessToken
+                accessToken: session.user.accessToken,
+                spotifyId: session.user.id
             }).then(res => {
-                if (res.data.success) setPlaylists(res.data.playlists)
+                if (res.data.success) {
+                    setPlaylists(res.data.playlists)
+                    setHighlightedSongs(res.data.highlightedsongs)
+                }
                 if (res.data.type === 'accessToken') signOut()
             })
+            // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+            //     accessToken: session.user.accessToken
+            // }).then(res => {
+            //     if (res.data.success) setPlaylists(res.data.playlists)
+            //     if (res.data.type === 'accessToken') signOut()
+            // })
         }
         main()
     }, [])
@@ -34,7 +46,7 @@ const Playlists = ({ session }) => {
                         <Grid mt={10} mb={10} rowGap={10} columnGap={20} alignSelf='center' templateColumns="repeat(4, 1fr)" flexDir='row'>
                             {playlists.map((playlist, index) => (
                                 <Flex key={index}>
-                                    <PlaylistCard playlist={playlist} />
+                                    <PlaylistCard hSongs={highlightedSongs}  playlist={playlist} />
                                 </Flex>
                             ))}
                         </Grid>

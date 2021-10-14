@@ -22,9 +22,11 @@ const Nav = () => {
         console.log(session.user.accessToken)
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
-                spotifyId: session.user.id
+                spotifyId: session.user.id,
+                accessToken: session.user.accessToken
             }).then(res => {
                 if (res.data.success) setFriends(res.data.friends)
+                if (res.data.type === 'accessToken') signOut()
             })
         }
         main()
