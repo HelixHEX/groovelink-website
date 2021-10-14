@@ -8,68 +8,99 @@ import {
     ListItem,
     IconButton
 } from '@chakra-ui/react'
-import { useSession } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 import { useEffect, useState } from 'react'
 import { allMessages } from '../helpers/api'
 import Avatar from './avatar'
-import { Edit } from 'react-feather'
+import { Edit, X } from 'react-feather'
+import axios from 'axios'
 
 const RightNav = () => {
     const [session] = useSession()
-    const [songs, setSongs] = useState([
-        {
-            name: 'Leave the door open',
-            artist: 'Bruno Mars, Anderson .Paak, Silk Sonic'
-        },
-        {
-            name: 'Animal',
-            artist: 'Neon Trees'
-        },
-        {
-            name: 'What you know',
-            artist: 'Two Door Cinema'
-        }
-    ])
+    const [user, setUser] = useState()
     const [messages, setMessages] = useState(allMessages)
+    useEffect(() => {
+        const main = async () => {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
+                spotifyId: session.user.id,
+                accessToken: session.user.accessToken
+            }).then(res => {
+                if (res.data.success) setUser(res.data.user)
+            })
+        }
+        main()
+    }, [])
+
+    const removeSong = async index => {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/remove-song-from-profile`, {
+            spotifyId: session.user.id,
+            accessToken: session.user.accessToken,
+            index
+        }).then(res => {
+            if (res.data.success) {
+                setUser({
+                    ...user,
+                    highlightedsongs: user.highlightedsongs.filter((song, oldIndex) => index !== oldIndex)
+                })
+            }
+            if (res.data.error) console.log(res.data.error)
+        })
+    }
     return (
         <>
-            <Flex flexDir='column' pt={10} pb={2} borderBottomRightRadius={20} borderTopRightRadius={20} bg='#F5F9FA' w={400} h={'100%'}>
-                <Image h={300} src='https://i.ibb.co/n6XCkX6/DSC06044.jpg' />
-                <Flex fontSize={20} ml={5} flexDir='column'>
-                    <Flex>
-                        <Avatar rounded={100} name={session.user.name} src={session.user.picture} h={100} w={100} mt={-50} />
-                        <Flex mt={2} color='#66676E' flexDir='column'>
-                            <Text ml={3} >{session.user.name}, 18</Text>
-                            <Text fontWeight='200' ml={3} >San Rafael, CA</Text>
-                        </Flex>
-                    </Flex>
-                    <Flex mt={5} flexDir='column'>
+            {user ?
+                <Flex flexDir='column' pt={10} pb={2} borderBottomRightRadius={20} borderTopRightRadius={20} bg='#F5F9FA' w={400} h={'100%'}>
+                    <Flex fontSize={20} ml={5} flexDir='column'>
                         <Flex>
-                            <Text alignSelf='center' color='#B4B5BD'>HIGHLIGHTED SONGS</Text>
-                            <IconButton icon={<Edit size={18} />} ml={3} w={30} h={30}></IconButton>
-                        </Flex>
-                        {songs.map((song, index) => (
-                            <Flex mt={3} color='#66676E' key={index} fontSize={15}>
-                                <Text isTruncated>{index + 1}. {song.name} - {song.artist}</Text>
+                            <Avatar alignSelf='center' rounded={100} name={user.name} src={user.picture} h={50} w={50} />
+                            <Flex color='#66676E' flexDir='column'>
+                                <Text ml={3} >{user.name}, 18</Text>
+                                <Text fontWeight='200' ml={3} >San Rafael, CA</Text>
                             </Flex>
-                        ))}
+                        </Flex>
+                        <Flex pr={3} mt={5} flexDir='column' w='100%'>
+                            <Flex>
+                                <Text alignSelf='center' color='#B4B5BD'>HIGHLIGHTED SONGS</Text>
+                                <IconButton icon={<Edit size={18} />} ml={3} w={30} h={30}></IconButton>
+                            </Flex>
+                            <Flex flexDir='column'>
+                                {user.highlightedsongs ?
+                                    user.highlightedsongs.map((song, index) => (
+                                        <Flex mt={4} key={index} >
+                                            <Text mt={3} color='#66676E' fontSize={15} isTruncated>{index + 1}.</Text>
+                                            <Flex ml={2} flexDir='column' color='#66676E' fontSize={15}>
+                                                <Text fontWeight='500' isTruncated w={280}>{song.name} </Text>
+                                                <Flex w='100%' isTruncated>
+                                                    <Text fontWeight='200' w={280} isTruncated alignSelf='center' >
+                                                        {song.artists.map((artist, artistIndex) => {
+                                                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : null}`
+                                                        })}
+                                                    </Text>
+                                                </Flex>
+                                            </Flex>
+                                            <Icon onClick={() => removeSong(index)} _hover={{ color: '#032F95', cursor: 'pointer' }} ml={5} alignSelf='center' as={X} />
+                                        </Flex>
+                                    ))
+                                    : null}
+                            </Flex>
+                        </Flex>
                     </Flex>
-                </Flex>
-                {/* <Flex margin='auto' mt={5} borderRadius={5} justifyContent='center' w={200} h={50} bg='#032F95'>
-                    <Text alignSelf='center' fontSize={25} color='#00F3F8'>Messages</Text>
-                </Flex>
-                <Flex overflowY='auto' flexDir='column' mt={5}>
-                    {messages.map((message, index) => (
-                        <Flex mt={5} key={index} >
-                            <Avatar ml={5} name={message.name} rounded={100} src={message.profile_img} w={45} h={45} />
-                            <Flex ml={3} flexDir='column' alignSelf='center'>
-                                <Text color='#66676E'>{message.sender}</Text>
-                                <Text color='#B4B5BD'>{message.text}</Text>
-                            </Flex>
-                        </Flex>
-                    ))}
-                </Flex> */}
+                    {/* <Flex margin='auto' mt={5} borderRadius={5} justifyContent='center' w={200} h={50} bg='#032F95'>
+                <Text alignSelf='center' fontSize={25} color='#00F3F8'>Messages</Text>
             </Flex>
+            <Flex overflowY='auto' flexDir='column' mt={5}>
+                {messages.map((message, index) => (
+                    <Flex mt={5} key={index} >
+                        <Avatar ml={5} name={message.name} rounded={100} src={message.profile_img} w={45} h={45} />
+                        <Flex ml={3} flexDir='column' alignSelf='center'>
+                            <Text color='#66676E'>{message.sender}</Text>
+                            <Text color='#B4B5BD'>{message.text}</Text>
+                        </Flex>
+                    </Flex>
+                ))}
+            </Flex> */}
+                </Flex>
+                : null}
         </>
     )
 }
