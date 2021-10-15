@@ -10,7 +10,8 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button
+    Button,
+    useToast
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { useSession } from 'next-auth/client'
@@ -39,6 +40,7 @@ const PlaylistCard = ({ playlist, hSongs }) => {
 const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
     const [session] = useSession()
     const [playlistData, setPlaylistData] = useState({})
+    const toast = useToast()
     useEffect(() => {
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/music/playlist`, {
@@ -49,6 +51,14 @@ const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
                     setPlaylistData(res.data.playlist)
                     console.log(res.data.playlist.tracks.items)
                 }
+                else if (res.data.type === 'accessToken') signOut()
+                else toast({
+                    title: 'Uh Oh :(',
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                })
                 // if (res.data.error)
             })
         }

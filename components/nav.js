@@ -4,6 +4,7 @@ import {
     Flex,
     Button,
     Image,
+    useToast,
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
@@ -13,10 +14,13 @@ import { signOut, useSession } from 'next-auth/client'
 
 import Avatar from '../components/avatar'
 import { useRouter } from 'next/router'
+import Friend from './friend'
+
 const Nav = () => {
     const router = useRouter()
     const [session] = useSession()
     const [friends, setFriends] = useState([])
+    const toast = useToast()
     useEffect(() => {
         console.log(session.user)
         console.log(session.user.accessToken)
@@ -26,8 +30,15 @@ const Nav = () => {
                 accessToken: session.user.accessToken
             }).then(res => {
                 if (res.data.success) setFriends(res.data.friends)
-                if (res.data.type === 'accessToken') signOut()
-                if (res.data.type === 'newAccount') router.push('/onboard')
+                else if (res.data.type === 'accessToken') signOut()
+                else if (res.data.type === 'newAccount') router.push('/onboard')
+                else toast({
+                    title: 'Uh Oh :(',
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                }) 
             })
         }
         main()
@@ -36,6 +47,7 @@ const Nav = () => {
     const handleNav = path => {
         router.push(path)
     }
+    
     return (
         <>
             <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={20} borderTopLeftRadius={20} bg='#F5F9FA' w={250} h={'100%'}>
@@ -59,9 +71,8 @@ const Nav = () => {
                     <Text color='#B4B5BD' mt={20} fontSize={30}>FRIENDS</Text>
                     {friends ?
                         friends.map((data, index) => (
-                            <Flex mt={5} key={index}>
-                                <Avatar rounded={100} src={data.picture} w={45} h={45} name={data.name} />
-                                <Text alignSelf='center' ml={3} w={150} isTruncated>{data.name}</Text>
+                            <Flex key={index} mt={5}>
+                                <Friend friend={data} />
                             </Flex>
                         )) : <Text>Loading...</Text>}
                     <Button mt={30} onClick={signOut}>Sign out</Button>

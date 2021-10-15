@@ -42,6 +42,14 @@ const Profile = () => {
                     setCity(data.city)
                     setState(data.state)
                 }
+                else if (res.data.type === 'accessToken') signOut()
+                else toast({
+                    title: "Uh Oh :(",
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                })
             })
         }
         main()

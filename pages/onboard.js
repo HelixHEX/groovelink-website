@@ -6,6 +6,7 @@ import {
     useToast,
     NumberInput,
     NumberInputField,
+    useToast
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { useSession } from 'next-auth/client'
@@ -22,6 +23,7 @@ const Onboard = () => {
     const [age, setAge] = useState(18)
     const [city, setCity] = useState()
     const [state, setState] = useState()
+    const toast = useToast()
 
     useEffect(() => {
         const main = async () => {
@@ -30,7 +32,14 @@ const Onboard = () => {
                 accessToken: session.user.accessToken
             }).then(res => {
                 if (res.data.success) router.push('/')
-                else console.log(res.data)
+                else if (res.data.type === 'accessToken') signOut()
+                else toast({
+                    title: 'Uh Oh :(',
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                })
             })
         }
         main()
@@ -80,6 +89,7 @@ const Onboard = () => {
                         isClosable: true,
                     })
                 }
+                else if (res.data.type === 'accessToken') signOut()
                 else toast({
                     title: "Uh Oh :(",
                     description: res.data.error,

@@ -2,7 +2,8 @@ import {
     Flex,
     Text,
     Grid,
-    GridItem
+    GridItem,
+    useToast
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { signOut, useSession } from 'next-auth/client'
@@ -14,6 +15,8 @@ const Playlists = () => {
     const [playlists, setPlaylists] = useState([])
     const [highlightedSongs, setHighlightedSongs] = useState([])
     const [session] = useSession()
+    const toast = useToast()
+
     useEffect(() => {
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/music/playlists`, {
@@ -24,7 +27,14 @@ const Playlists = () => {
                     setPlaylists(res.data.playlists)
                     setHighlightedSongs(res.data.highlightedsongs)
                 }
-                if (res.data.type === 'accessToken') signOut()
+                else if (res.data.type === 'accessToken') signOut()
+                else toast({
+                    title: "Uh Oh :(",
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                })
             })
             // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
             //     accessToken: session.user.accessToken

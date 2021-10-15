@@ -50,7 +50,7 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
                 })
                 setAdded('none')
             }
-            else if (res.data.type === 'accessToken') console.log(res.data)
+            else if (res.data.type === 'accessToken') signOut()
             else toast({
                 title: 'Uh Oh :(',
                 description: res.data.error,
@@ -74,7 +74,14 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
                 }
                 setAdded('block')
             }
-            else console.log(res.data)
+            else if (res.data.type === 'accessToken') signOut()
+            else toast({
+                title: 'Uh Oh :(',
+                description: res.data.error,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })  
         })
         console.log('hi')
     }

@@ -79,8 +79,8 @@ const Search = ({ hSongs, removeSongSearch, addSongSearch }) => {
                                     ? hSongs.map((song, index) => (
                                         <Flex key={index} mt={2}>
                                             <Text alignSelf='center'>{index + 1}. </Text>
-                                            <Flex ml={2} flexDir='column'>
-                                                <Text>{song.name}</Text>
+                                            <Flex w='100%' ml={2} flexDir='column'>
+                                                <Text isTruncated w='85%' >{song.name}</Text>
                                                 <Flex>
                                                     <Text fontWeight='200'>
                                                         {song.artists.map((artist, artistIndex) => {

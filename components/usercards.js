@@ -9,7 +9,7 @@ import {
 
 import Card from './card'
 import axios from 'axios'
-import { useSession } from 'next-auth/client'
+import { signOut, useSession } from 'next-auth/client'
 
 
 const UserCards = () => {
@@ -28,6 +28,7 @@ const UserCards = () => {
                     setUsers(res.data.potential)
                     setCurrentUser(res.data.potential[0])
                 }
+                else if (res.data.type === 'accessToken') signOut()
                 else toast({
                     title: 'Uh Oh :(',
                     description: res.data.error,
@@ -43,7 +44,8 @@ const UserCards = () => {
     const handleAdd = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/add-friend`, {
             spotifyId: session.user.id,
-            userId: users[0].spotifyId
+            userId: users[0].spotifyId,
+            accessToken: session.user.accessToken
         }).then(res => {
             if (res.data.success) {
                 // checkLength()
@@ -54,7 +56,10 @@ const UserCards = () => {
                     setUsers([])
                     setCurrentUser()
                 }
+            } else if (res.data.type === 'accessToken') {
+                signOut()
             } else {
+                console.log(res.data)
                 toast({
                     title: 'Uh Oh :(',
                     description: res.data.error,
@@ -69,7 +74,8 @@ const UserCards = () => {
     const handleSkip = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/skip-user`, {
             spotifyId: session.user.id,
-            userId: users[0].spotifyId
+            userId: users[0].spotifyId,
+            accessToken: session.user.accessToken
         }).then(res => {
             if (res.data.success) {
                 // checkLength()
@@ -80,7 +86,9 @@ const UserCards = () => {
                     setUsers([])
                     setCurrentUser()
                 }
-            } else {
+            } 
+            else if (res.data.type === 'accessToken') signOut()
+            else {
                 toast({
                     title: 'Uh Oh :(',
                     description: res.data.error,

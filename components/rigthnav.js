@@ -6,7 +6,8 @@ import {
     Icon,
     OrderedList,
     ListItem,
-    IconButton
+    IconButton,
+    useToast
 } from '@chakra-ui/react'
 import { signOut, useSession } from 'next-auth/client'
 import { useEffect, useState } from 'react'
@@ -20,6 +21,8 @@ const RightNav = () => {
     const [session] = useSession()
     const [user, setUser] = useState()
     const [messages, setMessages] = useState(allMessages)
+    const toast = useToast()
+
     useEffect(() => {
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
@@ -27,6 +30,14 @@ const RightNav = () => {
                 accessToken: session.user.accessToken
             }).then(res => {
                 if (res.data.success) setUser(res.data.user)
+                else if (res.data.type === 'accessToken') signOut()
+                else toast({
+                    title: 'Uh Oh :(',
+                    description: res.data.error,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: true,
+                }) 
             })
         }
         main()
@@ -44,7 +55,15 @@ const RightNav = () => {
                     highlightedsongs: user.highlightedsongs.filter(song => song.spotifyId !== spotifyId)
                 })
             }
-            if (res.data.error) console.log(res.data.error)
+            else if (res.data.type === 'accessToken') signOut()
+            else toast({
+                title: 'Uh Oh :(',
+                description: res.data.error,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })  
+            // if (res.data.error) console.log(res.data.error)
         })
     }
     const removeSongSearch = spotifyId => {
