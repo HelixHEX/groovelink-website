@@ -13,7 +13,7 @@ const Login = () => {
     if (session) router.push('/')
 
     const handleLogin = () => {
-        signIn("spotify", { callbackUrl: "http://localhost:3000/checkaccount" });
+        signIn("spotify", { callbackUrl: "https://www.groovelynk/checkaccount" });
     };
 
     return (

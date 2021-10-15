@@ -70,5 +70,8 @@ export default NextAuth({
         },
     },
     theme: 'light',
-    debug: true
+    debug: true,
+    pages: {
+        signIn: '/login'
+    }
 })
