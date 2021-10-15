@@ -27,6 +27,7 @@ const Nav = () => {
             }).then(res => {
                 if (res.data.success) setFriends(res.data.friends)
                 if (res.data.type === 'accessToken') signOut()
+                if (res.data.type === 'newAccount') router.push('/onboard')
             })
         }
         main()

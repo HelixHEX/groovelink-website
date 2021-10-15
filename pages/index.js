@@ -11,17 +11,17 @@ import RightNav from "../components/rigthnav"
 import UserCards from '../components/usercards'
 
 export default function Home() {
-  const [session] = useSession()
+  // const [session] = useSession()
   return (
     <>
       <Flex w='100vw' h='100vh' p={3}>
-        <Nav session={session} />
+        <Nav />
         <Flex flexDir='column' w='60%' h='100%' >
           <Text alignSelf='center' fontSize={50} color='#032F95'>Discover</Text>
           <Flex mt={10} alignSelf='center'>
-            <Button right={10} margin='auto' color='#00F3F8' bg='#032F95'>Skip</Button>
+            <Button right={10} margin='auto' color='white' bg='#032F95'>Skip</Button>
             <UserCards />
-            <Button left={10} margin='auto' color='#00F3F8' bg='#032F95'>Add</Button>
+            <Button left={10} margin='auto' color='white' bg='#032F95'>Add</Button>
           </Flex>
         </Flex>
         <RightNav />
