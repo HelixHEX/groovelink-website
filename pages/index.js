@@ -18,11 +18,7 @@ export default function Home() {
         <Nav />
         <Flex flexDir='column' w='60%' h='100%' >
           <Text alignSelf='center' fontSize={50} color='#032F95'>Discover</Text>
-          <Flex mt={10} alignSelf='center'>
-            <Button right={10} margin='auto' color='white' bg='#032F95'>Skip</Button>
-            <UserCards />
-            <Button left={10} margin='auto' color='white' bg='#032F95'>Add</Button>
-          </Flex>
+          <UserCards />
         </Flex>
         <RightNav />
       </Flex>
