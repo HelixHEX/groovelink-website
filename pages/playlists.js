@@ -36,12 +36,7 @@ const Playlists = () => {
                     isClosable: true,
                 })
             })
-            // await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/me`, {
-            //     accessToken: session.user.accessToken
-            // }).then(res => {
-            //     if (res.data.success) setPlaylists(res.data.playlists)
-            //     if (res.data.type === 'accessToken') signOut()
-            // })
+            
         }
         main()
     }, [])

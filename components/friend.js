@@ -19,14 +19,14 @@ import { useState } from 'react'
 import axios from 'axios'
 import { signOut, useSession } from 'next-auth/client'
 
-const Friend = ({ friend }) => {
+const Friend = ({ friend, page }) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dropDown, setDropDown] = useState('block')
     return (
         <>
-            <Flex>
-                <Avatar rounded={100} src={friend.picture} w={45} h={45} name={friend.name} />
-                <Text onClick={onOpen} _hover={{ cursor: 'pointer', color: '#032F95' }} alignSelf='center' ml={3} w={150} isTruncated>{friend.name}</Text>
+            <Flex onClick={onOpen} h={page ? 65 : null} w='100%' _hover={{ bg: page ? '#032F95' : '#F5F9FA', cursor: 'pointer', color: page ? 'white' : '#032F95' }} w={page ? 720 : '100%'}>
+                <Avatar alignSelf={page ? 'center' : 'flex-start'} rounded={100} src={friend.picture} w={45} h={45} name={friend.name} />
+                <Text alignSelf='center' ml={3} w={150} isTruncated>{friend.name}</Text>
             </Flex>
             <Modal blockScrollOnMount={true} size='4xl' isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
