@@ -11,30 +11,45 @@ import { useEffect, useState } from 'react';
 import { Plus, X } from 'react-feather'
 import { toastError } from '../helpers/error';
 
-const Song = ({ song, index, hSongs }) => {
+const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) => {
+    song = song.track ? song.track : song
     const [session] = useSession()
-    let min = (song.track.duration_ms / 1000) / 60;
+    let min = (song.duration_ms / 1000) / 60;
     min = ~~min
-    let seconds = (song.track.duration_ms / 1000) - (min * 60)
+    let seconds = (song.duration_ms / 1000) - (min * 60)
     seconds = ~~seconds
+    seconds = seconds
     const toast = useToast()
     const [added, setAdded] = useState('block')
     useEffect(() => {
+        // console.log(hSongs)
         if (hSongs.length > 0) {
-            let exists = hSongs.find(hSong => hSong.spotifyId === song.track.id)
-            if (exists)
+            // console.log(hSongs)
+            let exists = hSongs.find(hSong => hSong.spotifyId === song.id)
+            if (exists){
+                console.log(exists)
                 setAdded('none')
+            } else {
+                setAdded('block')
+            }
         }
-    }, [])
+    }, [song])
     const addToProfile = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/add-song-to-profile`, {
             accessToken: session.user.accessToken,
             spotifyId: session.user.id,
-            songId: song.track.id,
-            artists: song.track.artists,
-            name: song.track.name
+            songId: song.id,
+            artists: song.artists,
+            name: song.name
         }).then(res => {
-            if (res.data.success) setAdded('none')
+            if (res.data.success) {
+                if (search) addSongSearch({
+                    name: song.name,
+                    artists: song.artists,
+                    spotifyId: song.id
+                })
+                setAdded('none')
+            }
             else if (res.data.type === 'accessToken') console.log(res.data)
             else toast({
                 title: 'Uh Oh :(',
@@ -49,10 +64,14 @@ const Song = ({ song, index, hSongs }) => {
         console.log(index)
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/remove-song-from-profile`, {
             spotifyId: session.user.id,
+            songId: song.id,
             accessToken: session.user.accessToken,
             index
         }).then(res => {
             if (res.data.success) {
+                if (search) {
+                    removeSongSearch(song.id)
+                }
                 setAdded('block')
             }
             else console.log(res.data)
@@ -61,17 +80,13 @@ const Song = ({ song, index, hSongs }) => {
     }
     return (
         <>
-            <Flex w='100%' h={50} mt={10} _hover={{ bg: '#032F95', color: 'white', cursor: 'pointer' }}>
-                <Text ml={2} alignSelf='center'>{index + 1}. {song.track.name} -</Text>
-                <Flex ml={1}>
-                    {/* {song.track.artists.map((artist, artistIndex) => {
-                        if (artistIndex + 1 === song.track.artists.length)
-                            return <Text alignSelf='center' key={artistIndex}>{artist.name}</Text>
-                        else return <Text alignSelf='center' key={artistIndex}>{artist.name},&nbsp;</Text>
-                    })} */}
-                    <Text fontWeight='200' w={'85%'} isTruncated alignSelf='center' >
-                        {song.track.artists.map((artist, artistIndex) => {
-                            return `${artist.name}${artistIndex + 1 !== song.track.artists.length ? ', ' : null}`
+            <Flex w='100%' mt={10} h={65} _hover={{ bg: '#032F95', color: 'white', cursor: 'pointer' }}>
+                <Text fontSize={20} ml={2} alignSelf='center'>{index + 1}.</Text>
+                <Flex alignSelf='center' flexDir='column' fontSize={20} ml={3}>
+                    <Text isTruncated w={600}>{song.name}</Text>
+                    <Text fontWeight='200'>
+                        {song.artists.map((artist, artistIndex) => {
+                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : ''}`
                         })}
                     </Text>
                 </Flex>
@@ -81,6 +96,27 @@ const Song = ({ song, index, hSongs }) => {
                     <Icon display={added === 'block' ? 'none' : 'block'} onClick={() => removeSong()} _hover={{ color: 'black' }} w={25} h={25} alignSelf='center' as={X} />
                 </Flex>
             </Flex>
+            {/* <Flex w='100%' h={65} mt={12} _hover={{ bg: '#032F95', color: 'white', cursor: 'pointer' }}>
+                <Text ml={2} alignSelf='center'>{index + 1}.</Text>
+                <Flex flexDir='column' ml={1}>
+                    <Text>{song.name}</Text>
+                    {song.artists.map((artist, artistIndex) => {
+                        if (artistIndex + 1 === song.artists.length)
+                            return <Text alignSelf='center' key={artistIndex}>{artist.name}</Text>
+                        else return <Text alignSelf='center' key={artistIndex}>{artist.name},&nbsp;</Text>
+                    })}
+                    <Text fontWeight='200' isTruncated alignSelf='center' >
+                        {song.artists.map((artist, artistIndex) => {
+                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : ''}`
+                        })}
+                    </Text>
+                </Flex>
+                <Flex pos='absolute' alignSelf='center' right={50}>
+                    <Text mr={10} >{min}:{seconds}</Text>
+                    <Icon display={added} onClick={() => addToProfile()} _hover={{ color: 'black' }} w={25} h={25} alignSelf='center' as={Plus} />
+                    <Icon display={added === 'block' ? 'none' : 'block'} onClick={() => removeSong()} _hover={{ color: 'black' }} w={25} h={25} alignSelf='center' as={X} />
+                </Flex>
+            </Flex> */}
         </>
     )
 }

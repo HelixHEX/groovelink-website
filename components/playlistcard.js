@@ -55,7 +55,7 @@ const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
         main()
     }, [])
     return (
-        <Modal blockScrollOnMount={true} size='6xl' isOpen={isOpen} onClose={onClose}>
+        <Modal blockScrollOnMount={true} size='4xl' isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{playlist.name}</ModalHeader>

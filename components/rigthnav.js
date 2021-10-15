@@ -14,6 +14,7 @@ import { allMessages } from '../helpers/api'
 import Avatar from './avatar'
 import { Edit, X } from 'react-feather'
 import axios from 'axios'
+import Search from './search'
 
 const RightNav = () => {
     const [session] = useSession()
@@ -31,19 +32,35 @@ const RightNav = () => {
         main()
     }, [])
 
-    const removeSong = async index => {
+    const removeSong = async (spotifyId) => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/remove-song-from-profile`, {
             spotifyId: session.user.id,
             accessToken: session.user.accessToken,
-            index
+            songId: spotifyId
         }).then(res => {
             if (res.data.success) {
                 setUser({
                     ...user,
-                    highlightedsongs: user.highlightedsongs.filter((song, oldIndex) => index !== oldIndex)
+                    highlightedsongs: user.highlightedsongs.filter(song => song.spotifyId !== spotifyId)
                 })
             }
             if (res.data.error) console.log(res.data.error)
+        })
+    }
+    const removeSongSearch = spotifyId => {
+        setUser({
+            ...user,
+            highlightedsongs: user.highlightedsongs.filter(song => song.spotifyId != spotifyId)
+        })
+    }
+
+    const addSongSearch = song => {
+        setUser({
+            ...user,
+            highlightedsongs: [
+                ...user.highlightedsongs,
+                song
+            ]
         })
     }
     return (
@@ -54,14 +71,14 @@ const RightNav = () => {
                         <Flex>
                             <Avatar alignSelf='center' rounded={100} name={user.name} src={user.picture} h={50} w={50} />
                             <Flex color='#66676E' flexDir='column'>
-                                <Text ml={3} >{user.name}, 18</Text>
-                                <Text fontWeight='200' ml={3} >San Rafael, CA</Text>
+                                <Text ml={3} >{user.name}, {user.age}</Text>
+                                <Text fontWeight='200' ml={3} >{user.city}, {user.state}</Text>
                             </Flex>
                         </Flex>
                         <Flex pr={3} mt={5} flexDir='column' w='100%'>
                             <Flex>
                                 <Text alignSelf='center' color='#B4B5BD'>HIGHLIGHTED SONGS</Text>
-                                <IconButton icon={<Edit size={18} />} ml={3} w={30} h={30}></IconButton>
+                                <Search addSongSearch={addSongSearch} removeSongSearch={removeSongSearch} hSongs={user.highlightedsongs} />
                             </Flex>
                             <Flex flexDir='column'>
                                 {user.highlightedsongs ?
@@ -73,12 +90,12 @@ const RightNav = () => {
                                                 <Flex w='100%' isTruncated>
                                                     <Text fontWeight='200' w={280} isTruncated alignSelf='center' >
                                                         {song.artists.map((artist, artistIndex) => {
-                                                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : null}`
+                                                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : ''}`
                                                         })}
                                                     </Text>
                                                 </Flex>
                                             </Flex>
-                                            <Icon onClick={() => removeSong(index)} _hover={{ color: '#032F95', cursor: 'pointer' }} ml={5} alignSelf='center' as={X} />
+                                            <Icon onClick={() => removeSong(song.spotifyId)} _hover={{ color: '#032F95', cursor: 'pointer' }} ml={5} alignSelf='center' as={X} />
                                         </Flex>
                                     ))
                                     : null}

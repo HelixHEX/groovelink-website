@@ -59,13 +59,16 @@ const Onboard = () => {
             city,
             state
         }).then(res => {
-            if (res.data.success) toast({
-                title: "Account Created",
-                description: 'Your account was successfully created!',
-                status: "success",
-                duration: 5000,
-                isClosable: true,
-            })
+            if (res.data.success) {
+                toast({
+                    title: "Account Created",
+                    description: 'Your account was successfully created!',
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                })
+                router.push('/')
+            }
             else if (res.data.error === 'User exists') {
                 router.push('/')
                 toast({
@@ -83,7 +86,7 @@ const Onboard = () => {
                 duration: 5000,
                 isClosable: true,
             })
-            router.push('/')
+
         })
     }
     return (
