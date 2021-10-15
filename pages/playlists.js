@@ -39,7 +39,7 @@ const Playlists = () => {
             
         }
         main()
-    }, [])
+    }, [session.user.accessToken, session.user.id, toast])
     return (
         <>
             <Flex w='100vw' h='100vh' p={3}>

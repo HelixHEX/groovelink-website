@@ -6,7 +6,6 @@ import {
     useToast,
     NumberInput,
     NumberInputField,
-    useToast
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { useSession } from 'next-auth/client'
@@ -23,7 +22,6 @@ const Onboard = () => {
     const [age, setAge] = useState(18)
     const [city, setCity] = useState()
     const [state, setState] = useState()
-    const toast = useToast()
 
     useEffect(() => {
         const main = async () => {
@@ -43,7 +41,7 @@ const Onboard = () => {
             })
         }
         main()
-    }, [])
+    }, [router, session.user.id, session.user.accessToken, toast])
 
     const checkAge = e => {
         if (e.toString().length > 1 && e < 18) {

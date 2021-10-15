@@ -27,7 +27,7 @@ const CheckAccount = () => {
             })
         }
         main()
-    }, [])
+    }, [router, session.user.email, session.user.id, session.user.name, session.user.picture, toast])
 
     return null
 }

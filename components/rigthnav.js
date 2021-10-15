@@ -41,7 +41,7 @@ const RightNav = () => {
             })
         }
         main()
-    }, [])
+    }, [session.user, toast])
 
     const removeSong = async (spotifyId) => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/remove-song-from-profile`, {

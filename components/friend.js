@@ -24,7 +24,7 @@ const Friend = ({ friend, page }) => {
     const [dropDown, setDropDown] = useState('block')
     return (
         <>
-            <Flex onClick={onOpen} h={page ? 65 : null} w='100%' _hover={{ bg: page ? '#032F95' : '#F5F9FA', cursor: 'pointer', color: page ? 'white' : '#032F95' }} w={page ? 720 : '100%'}>
+            <Flex onClick={onOpen} h={page ? 65 : null} _hover={{ bg: page ? '#032F95' : '#F5F9FA', cursor: 'pointer', color: page ? 'white' : '#032F95' }} w={page ? 720 : '100%'}>
                 <Avatar alignSelf={page ? 'center' : 'flex-start'} rounded={100} src={friend.picture} w={45} h={45} name={friend.name} />
                 <Text alignSelf='center' ml={3} w={150} isTruncated>{friend.name}</Text>
             </Flex>

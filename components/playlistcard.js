@@ -25,7 +25,7 @@ const PlaylistCard = ({ playlist, hSongs }) => {
         <>
             <Flex onClick={onOpen} p={3} textAlign='center' _hover={{ bg: '#032F95', color: 'white', cursor: 'pointer', rounded: '10' }} flexDir='column'>
                 {playlist.images.length > 0
-                    ? <Image margin='auto' rounded={10} w={150} h={150} src={playlist.images[0].url} /> 
+                    ? <Image alt={playlist.name} margin='auto' rounded={10} w={150} h={150} src={playlist.images[0].url} /> 
                     : <Flex margin='auto' rounded={10} w={150} h={150} bg='blue.400'>
                         <Text margin='auto' fontSize={50} color='white'>{playlist.name.charAt(0)}</Text>
                     </Flex>
@@ -63,7 +63,7 @@ const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
             })
         }
         main()
-    }, [])
+    }, [session.user, toast, playlist.id])
     return (
         <Modal blockScrollOnMount={true} size='4xl' isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />

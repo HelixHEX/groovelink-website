@@ -39,7 +39,7 @@ const UserCards = () => {
             })
         }
         main()
-    }, [])
+    }, [ session.user.id, session.user.accessToken, toast])
 
     const handleAdd = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/add-friend`, {

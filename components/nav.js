@@ -42,7 +42,7 @@ const Nav = () => {
             })
         }
         main()
-    }, [])
+    }, [router, session.user, toast])
 
     const handleNav = path => {
         router.push(path)

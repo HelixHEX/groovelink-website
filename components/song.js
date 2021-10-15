@@ -33,7 +33,7 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
                 setAdded('block')
             }
         }
-    }, [song])
+    }, [song, hSongs])
     const addToProfile = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/add-song-to-profile`, {
             accessToken: session.user.accessToken,

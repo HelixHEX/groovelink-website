@@ -53,7 +53,7 @@ const Profile = () => {
             })
         }
         main()
-    }, [])
+    }, [toast, session.user.id, session.user.accessToken])
 
     const checkAge = e => {
         if (e.toString().length > 1 && e < 18) {
