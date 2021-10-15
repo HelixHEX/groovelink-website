@@ -39,7 +39,7 @@ const Onboard = () => {
     const checkAge = e => {
         if (e.toString().length > 1 && e < 18) {
             toast({
-                title: "You must be at least 18 years old to use GrooveLink",
+                title: "You must be at least 18 years old to use GrooveLynk",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -48,46 +48,56 @@ const Onboard = () => {
         setAge(e)
     }
     const handleSubmit = async () => {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
-            fName,
-            lName,
-            email,
-            age,
-            accessToken: session.user.accessToken,
-            spotifyId: session.user.id,
-            picture: session.user.picture,
-            city,
-            state
-        }).then(res => {
-            if (res.data.success) {
-                toast({
-                    title: "Account Created",
-                    description: 'Your account was successfully created!',
-                    status: "success",
-                    duration: 5000,
-                    isClosable: true,
-                })
-                router.push('/')
-            }
-            else if (res.data.error === 'User exists') {
-                router.push('/')
-                toast({
+        if (fName.length > 0 && lName.length > 0 && age.toString().length > 1 && email.length > 0 && city.length > 0 && state.length > 0) {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/create`, {
+                fName,
+                lName,
+                email,
+                age,
+                accessToken: session.user.accessToken,
+                spotifyId: session.user.id,
+                picture: session.user.picture,
+                city,
+                state
+            }).then(res => {
+                if (res.data.success) {
+                    toast({
+                        title: "Account Created",
+                        description: 'Your account was successfully created!',
+                        status: "success",
+                        duration: 5000,
+                        isClosable: true,
+                    })
+                    router.push('/')
+                }
+                else if (res.data.error === 'User exists') {
+                    router.push('/')
+                    toast({
+                        title: "Uh Oh :(",
+                        description: res.data.error,
+                        status: "error",
+                        duration: 5000,
+                        isClosable: true,
+                    })
+                }
+                else toast({
                     title: "Uh Oh :(",
                     description: res.data.error,
                     status: "error",
                     duration: 5000,
                     isClosable: true,
                 })
-            }
-            else toast({
-                title: "Uh Oh :(",
-                description: res.data.error,
+
+            })
+        } else {
+            toast({
+                title: "Uh Oh : (",
+                description: "All fields are required",
                 status: "error",
                 duration: 5000,
                 isClosable: true,
             })
-
-        })
+        }
     }
     return (
         <>

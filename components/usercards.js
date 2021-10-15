@@ -101,7 +101,7 @@ const UserCards = () => {
                     <Button onClick={() => handleAdd()} left={10} margin='auto' color='white' bg='#032F95'>Add</Button>
 
                 </Flex>
-                : "You've ran out of potential matches"}
+                : <Text margin='auto'> There are currently no potential matches :(</Text>}
         </>
     )
 }
