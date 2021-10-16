@@ -16,7 +16,7 @@ const CheckAccount = () => {
                 email: session.user.email,
                 picture: session.user.picture ? session.user.picture : null
             }).then(res => {
-                if (res.status === 200) router.push('/')
+                if (res.data.success) router.push('/')
                 if (res.data.error === 'Create account') router.push('/onboard')
                 else toast({
                     title: 'Uh Oh :(',
