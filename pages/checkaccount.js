@@ -11,6 +11,7 @@ const CheckAccount = () => {
     useEffect(() => {
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/check-account`, {
+                accessToken: session.user.accessToken,
                 spotifyId: session.user.id,
                 name: session.user.name,
                 email: session.user.email,
