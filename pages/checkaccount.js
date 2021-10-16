@@ -17,7 +17,7 @@ const CheckAccount = () => {
                 picture: session.user.picture ? session.user.picture : null
             }).then(res => {
                 if (res.data.success) router.push('/')
-                if (res.data.error === 'Create account') router.push('/onboard')
+                else if (res.data.error === 'Create account') router.push('/onboard')
                 else toast({
                     title: 'Uh Oh :(',
                     description: res.data.error,
