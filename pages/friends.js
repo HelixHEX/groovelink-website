@@ -44,7 +44,7 @@ const Friends = () => {
                     <Flex flexDir='column' w='100%' overflowY='auto' mt={20} ml={5} mr={5}>
                         {friends.length > 0
                             ? friends.map((friend, index) => (
-                                <Flex key={index} mt={5}  _hover={{color: 'white', bg:'#032F95'}} h={65}>
+                                <Flex w='40%' key={index} mt={5}  _hover={{color: 'white', bg:'#032F95'}} h={65}>
                                     <Text ml={2} fontSize={20} alignSelf='center' mr={3}>{index + 1}. </Text>
                                     <Flex alignSelf='center'>
                                         <Friend page={true} friend={friend} />
