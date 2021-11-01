@@ -41,7 +41,7 @@ const Friends = () => {
                 <Nav />
                 <Flex flexDir='column' w='60%' h='100%'>
                     <Text alignSelf='center' fontSize={50} color='#032F95'>Friends</Text>
-                    <Flex w='100%' overflowY='auto' mt={20} ml={5} mr={5}>
+                    <Flex flexDir='column' w='100%' overflowY='auto' mt={20} ml={5} mr={5}>
                         {friends.length > 0
                             ? friends.map((friend, index) => (
                                 <Flex key={index} mt={5}  _hover={{color: 'white', bg:'#032F95'}} h={65}>
