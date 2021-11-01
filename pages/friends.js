@@ -41,10 +41,10 @@ const Friends = () => {
                 <Nav />
                 <Flex flexDir='column' w='60%' h='100%'>
                     <Text alignSelf='center' fontSize={50} color='#032F95'>Friends</Text>
-                    <Flex flexDir='column' w='100%' overflowY='auto' mt={20} ml={5} mr={5}>
+                    <Flex flexDir='column' w='100%' overflowY='auto' mt={20} pl={5} pr={5}>
                         {friends.length > 0
                             ? friends.map((friend, index) => (
-                                <Flex w='40%' key={index} mt={5}  _hover={{color: 'white', bg:'#032F95'}} h={65}>
+                                <Flex w='100%' key={index} mt={5}  _hover={{color: 'white', bg:'#032F95'}} h={65}>
                                     <Text ml={2} fontSize={20} alignSelf='center' mr={3}>{index + 1}. </Text>
                                     <Flex alignSelf='center'>
                                         <Friend page={true} friend={friend} />
