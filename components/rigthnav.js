@@ -37,7 +37,7 @@ const RightNav = () => {
                     status: "error",
                     duration: 5000,
                     isClosable: true,
-                }) 
+                })
             })
         }
         main()
@@ -62,7 +62,7 @@ const RightNav = () => {
                 status: "error",
                 duration: 5000,
                 isClosable: true,
-            })  
+            })
             // if (res.data.error) console.log(res.data.error)
         })
     }
@@ -85,7 +85,7 @@ const RightNav = () => {
     return (
         <>
             {user ?
-                <Flex flexDir='column' pt={10} pb={2} borderBottomRightRadius={20} borderTopRightRadius={20} bg='#F5F9FA' w={400} h={'100%'}>
+                <Flex flexDir='column' pt={10} pb={2} borderBottomRightRadius={20} borderTopRightRadius={20} bg='#F5F9FA' w={[200, 300, 400, 400]} h={'100%'}>
                     <Flex fontSize={20} ml={5} flexDir='column'>
                         <Flex>
                             <Avatar alignSelf='center' rounded={100} name={user.name} src={user.picture} h={50} w={50} />
@@ -99,24 +99,26 @@ const RightNav = () => {
                                 <Text alignSelf='center' color='#B4B5BD'>HIGHLIGHTED SONGS</Text>
                                 <Search addSongSearch={addSongSearch} removeSongSearch={removeSongSearch} hSongs={user.highlightedsongs} />
                             </Flex>
-                            <Flex flexDir='column'>
+                            <Flex w='100%' flexDir='column'>
                                 {user.highlightedsongs ?
-                                    user.highlightedsongs.map((song, index) => (
-                                        <Flex mt={4} key={index} >
-                                            <Text mt={3} color='#66676E' fontSize={15} isTruncated>{index + 1}.</Text>
-                                            <Flex ml={2} flexDir='column' color='#66676E' fontSize={15}>
-                                                <Text fontWeight='500' isTruncated w={280}>{song.name} </Text>
-                                                <Flex w='100%' isTruncated>
-                                                    <Text fontWeight='200' w={280} isTruncated alignSelf='center' >
-                                                        {song.artists.map((artist, artistIndex) => {
-                                                            return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : ''}`
-                                                        })}
-                                                    </Text>
+                                    user.highlightedsongs.length > 0 ?
+                                        user.highlightedsongs.map((song, index) => (
+                                            <Flex w='100%' mt={4} key={index} >
+                                                <Text mt={3} color='#66676E' fontSize={15} isTruncated>{index + 1}.</Text>
+                                                <Flex ml={2} flexDir='column' color='#66676E' fontSize={15}>
+                                                    <Text fontWeight='500' isTruncated w={280}>{song.name} </Text>
+                                                    <Flex w='100%' >
+                                                        <Text fontWeight='200' w={280} isTruncated alignSelf='center' >
+                                                            {song.artists.map((artist, artistIndex) => {
+                                                                return `${artist.name}${artistIndex + 1 !== song.artists.length ? ', ' : ''}`
+                                                            })}
+                                                        </Text>
+                                                    </Flex>
                                                 </Flex>
+                                                <Icon onClick={() => removeSong(song.spotifyId)} _hover={{ color: '#032F95', cursor: 'pointer' }} ml={5} alignSelf='center' as={X} />
                                             </Flex>
-                                            <Icon onClick={() => removeSong(song.spotifyId)} _hover={{ color: '#032F95', cursor: 'pointer' }} ml={5} alignSelf='center' as={X} />
-                                        </Flex>
-                                    ))
+                                        ))
+                                        : <Text fontSize={20} textAlign='center' fontWeight='200'>Start adding songs so others can see what you're into!</Text>
                                     : null}
                             </Flex>
                         </Flex>

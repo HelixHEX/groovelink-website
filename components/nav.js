@@ -50,7 +50,7 @@ const Nav = () => {
     
     return (
         <>
-            <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={20} borderTopLeftRadius={20} bg='#F5F9FA' w={250} h={'100%'}>
+            <Flex flexDir='column' pt={10} pb={10} borderBottomLeftRadius={20} borderTopLeftRadius={20} bg='#F5F9FA' w={[250]} h={'100%'}>
                 <Flex alignSelf='center' flexDir='column'>
                     <Flex onClick={() => handleNav('/')} _hover={{ cursor: 'pointer', color: '#032F95' }} color={router.pathname === '/' ? '#032F95' : '#66676E'} h={6}>
                         <Icon h={25} w={25} alignSelf='center' as={UserPlus} />
