@@ -14,8 +14,6 @@ const Friends = () => {
     const [session] = useSession()
     const [friends, setFriends] = useState([])
     useEffect(() => {
-        console.log(session.user)
-        console.log(session.user.accessToken)
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
                 spotifyId: session.user.id,

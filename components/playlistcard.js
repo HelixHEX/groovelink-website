@@ -49,7 +49,7 @@ const PlaylistModal = ({ playlist, isOpen, onClose, hSongs }) => {
             }).then(res => {
                 if (res.data.success) {
                     setPlaylistData(res.data.playlist)
-                    console.log(res.data.playlist.tracks.items)
+                    // console.log(res.data.playlist.tracks.items)
                 }
                 else if (res.data.type === 'accessToken') signOut()
                 else toast({

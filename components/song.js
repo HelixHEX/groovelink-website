@@ -27,7 +27,7 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
             // console.log(hSongs)
             let exists = hSongs.find(hSong => hSong.spotifyId === song.id)
             if (exists){
-                console.log(exists)
+                // console.log(exists)
                 setAdded('none')
             } else {
                 setAdded('block')
@@ -61,7 +61,6 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
         })
     }
     const removeSong = async () => {
-        console.log(index)
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/remove-song-from-profile`, {
             spotifyId: session.user.id,
             songId: song.id,
@@ -83,7 +82,6 @@ const Song = ({ search, song, index, hSongs, removeSongSearch, addSongSearch }) 
                 isClosable: true,
             })  
         })
-        console.log('hi')
     }
     return (
         <>

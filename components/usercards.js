@@ -59,7 +59,6 @@ const UserCards = () => {
             } else if (res.data.type === 'accessToken') {
                 signOut()
             } else {
-                console.log(res.data)
                 toast({
                     title: 'Uh Oh :(',
                     description: res.data.error,

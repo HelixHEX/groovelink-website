@@ -22,8 +22,8 @@ const Nav = () => {
     const [friends, setFriends] = useState([])
     const toast = useToast()
     useEffect(() => {
-        console.log(session.user)
-        console.log(session.user.accessToken)
+        // console.log(session.user)
+        // console.log(session.user.accessToken)
         const main = async () => {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/user/friends`, {
                 spotifyId: session.user.id,
